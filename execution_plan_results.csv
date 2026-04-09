@@ -1,0 +1,7 @@
+Variant,Mutation_Name,AF_afr,Clinical_Significance
+rs28942205,3120+1G>A,0.0042,Pathogenic (2-star)
+rs75527207,G551D,0.00002,Pathogenic (3-star)
+Aggregate,Other_Pathogenic,0.0008,Likely Pathogenic
+rs1050828,G202A_G6PD,0.116,Pathogenic (Class III)
+rs334,HbS_Sickle_Cell,0.08,Pathogenic (Severe)
+rs33930165,HbC_Variant,0.02,Pathogenic (Mild)
