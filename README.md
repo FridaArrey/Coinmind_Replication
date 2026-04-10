@@ -1,50 +1,53 @@
-[Genomic Health Equity Pipeline.md](https://github.com/user-attachments/files/26601230/Genomic.Health.Equity.Pipeline.md)
-# **Genomic Health Equity Pipeline**
+# Genomic Health Equity Pipeline
+### A Coinmind Replication & Extension for Underrepresented Populations
 
-### ***A Coinmind Replication & Extension for Underrepresented Populations***
+This project replicates and extends the award-winning **Coinmind** methodology to estimate the prevalence of genetic diseases in African populations using high-resolution population sequencing data (**gnomAD v4.1/2026**). By pivoting from European-centric benchmarks to population-specific allele frequencies, this pipeline identifies diagnostic "blind spots" and quantifies the health equity gap.
 
-This project replicates the award-winning **Coinmind** methodology to estimate the prevalence of genetic diseases in African populations using high-resolution population sequencing data (**gnomAD v4.0**). By pivoting from European-centric benchmarks to population-specific allele frequencies, this pipeline identifies diagnostic "blind spots" in global health.
-
-## **🧬 Core Methodology: The "Equity" Logic**
+## 🧬 Core Methodology: The "Equity" Logic
 
 Most clinical genetic panels are optimized for European cohorts. This pipeline recalibrates risk by:
+* **Targeting Population-Specific Variants:** Focusing on variants like `rs28942205` (3120+1G>A) which are prevalent in African ancestry but virtually absent in European standard panels.
+* **Accounting for Genetic Architecture:** Moving beyond simple counting to model diverse inheritance patterns:
+    * **Autosomal Recessive (Rare):** CFTR risk modeling.
+    * **Autosomal Recessive (High-Frequency):** Sickle Cell modeling with **F-statistic adjustments** for population structure.
+    * **X-Linked (Hemizygous):** Distinct modeling for G6PD prevalence in males vs. females.
 
-1. **Targeting Population-Specific Variants:** Focusing on variants like rs28942205 ($3120+1G\>A$) which are prevalent in African ancestry but rare elsewhere.  
-2. **Accounting for Compound Heterozygosity:** Calculating the probability of an individual carrying one common regional variant and one rare "private" mutation—a major source of misdiagnosis.  
-3. **Multi-Model Support:** Applying Hardy-Weinberg for autosomal recessive traits (CF, Sickle Cell) and hemizygous modeling for X-linked traits (G6PD).
+## 🛠 Project Structure
 
-## **🛠 Project Structure**
+```bash
+.
+├── calc_prevalence.py          # Core logic for CFTR risk modeling
+├── run_blood_disorders.py      # X-linked (G6PD) and HBB Sensitivity Analysis
+├── generate_dashboard.py       # Accessible, colorblind-friendly visualizations
+├── execution_plan_results.csv  # Validated scientific ledger (AFR frequencies)
+└── README.md                   # Project documentation
 
-Bash  
-.  
-├── calc\_prevalence.py          \# Core logic for CFTR risk modeling  
-├── run\_blood\_disorders.py      \# Extension script for HBB and G6PD  
-├── generate\_dashboard.py       \# Accessible, colorblind-friendly visualizations  
-├── execution\_plan\_results.csv  \# Validated scientific ledger (AFR frequencies)  
-└── README.md                   \# Project documentation
 
-## **📊 Benchmarked Results**
+## 📊 Benchmarked Results (AFR Cohort)
 
-The pipeline was tested across three distinct genetic architectures within the African (AFR) cohort:
+| Disorder | Inheritance | Model Type | Predicted Prevalence |
+| :--- | :--- | :--- | :--- |
+| **Cystic Fibrosis** | Autosomal Rec. | Rare/Drift | 1 in 39,681 |
+| **G6PD Deficiency** | X-Linked | Hemizygous | 1 in 8 (Males) |
+| **Sickle Cell (SCD)** | Autosomal Rec. | HWE (F=0) | 1 in 99 |
+| **Sickle Cell (SCD)** | Autosomal Rec. | **Endogamy (F=0.05)** | **1 in 68** |
 
-| Disorder | Frequency Model | Key Variant | Predicted Prevalence |
-| :---- | :---- | :---- | :---- |
-| **Cystic Fibrosis** | Rare/Drift | rs28942205 | **1 in 39,681** |
-| **Sickle Cell (SCD)** | Balancing Selection | rs334 (HbS) | **1 in 104** |
-| **G6PD Deficiency** | X-Linked | rs1050828 | **1 in 8 (Males)** |
+---
 
-## **🚀 Key Technical Features**
+## 🚀 Key Technical Features
 
-* **Infrastructure Resilience:** Developed a "Local-First" data injection strategy to bypass cloud API 503 errors during high-traffic periods.  
-* **Accessibility-First Design:** All visualizations utilize the **Wong Palette** and double-encoding (hatch patterns) for colorblind accessibility.  
-* **ClinVar Validation:** Every variant in the ledger is cross-referenced for pathogenicity (2-star minimum evidence).
+* **X-Linked Logic:** Correctly models male prevalence as $q$, identifying significant gender-based diagnostic gaps.
+* **Accessibility:** Visuals utilize the **Wong Palette** and double-encoding (hatch patterns) for colorblind safety.
+* **Sensitivity Modeling:** Incorporates $F$-statistics to address the "Hardy-Weinberg Critique" in populations with high endogamy.
+* **Scientific Integrity:** All variants cross-referenced via ClinVar for pathogenic evidence (2-star minimum).
 
-## **💡 How to Run**
+---
 
-1. **Update the Ledger:** Add new rsIDs and frequencies to execution\_plan\_results.csv.  
-2. **Execute Analysis:**  
-   Bash  
-   python3 calc\_prevalence.py  
+## 💡 How to Run
+
+1. **Update the Ledger:** Add new rsIDs to `execution_plan_results.csv`.
+2. **Execute Audit:**
+   ```bash
 3. **Generate Dashboard:**  
    Bash  
    python3 generate\_dashboard\_accessible.py  
